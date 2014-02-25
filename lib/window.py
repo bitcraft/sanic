@@ -4,6 +4,7 @@ from pyglet.window import Window
 import pyglet
 import pymunk
 
+
 class GameWindow(Window):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
