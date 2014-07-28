@@ -354,11 +354,14 @@ class Model(models.UprightModel):
         # make the feet a little slippery
         self.feet.shape.friction = .8
 
+        # make is easier to spin the ball
+        self.move_mod = 4.0
+
         # make the game more 'fun', crouching adds a body with a large mass
         # to the player, so as the player is crouched, it carries more inertia
         # and more importantly, it goes fast
         weight = pymunk.Body(20, pymunk.inf)
-        weight.velocity = pymunk_body.velocity * 1.6
+        weight.velocity = pymunk_body.velocity * 1.7
         weight.position = pymunk_body.position
         w_joint = pymunk.PivotJoint(weight, pymunk_body, (0, 0))
         self.weight = (weight, w_joint)
@@ -397,6 +400,7 @@ class Model(models.UprightModel):
 
         # make the feet sticky again
         self.feet.shape.friction = pymunk.inf
+        self.move_mod = 1.0
 
         diff = pymunk.Vec2d(pymunk_feet.position)
 
