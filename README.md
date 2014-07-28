@@ -1,84 +1,37 @@
 # Sanic Forever
 
 
-running the game
+Running the game
 ================
-recommended is a core 2 duo 2.4 ghz or higher
-slower platforms will experience low framerate and missed animation frames
+Recommended is a core 2 duo 2.4 ghz or higher  
 
 
-default controls
+Default controls
 ================
 
-w    => jump
-down => crouch
+w    => jump  
+down => crouch  
 
-- arrow keys move
-- hold up while walking to climb stairs
+- arrow keys move  
 
 
-notes
+Notes
 =====
 draw-physics-overlay drawing mode (sanicforever.ini) is very slow
 
 
-version requirements
+Version Requirements
 ====================
-pygame 1.9
-pymunk 4
-pymunktmx 0.7
-pytmx 2.16.4
-pyscroll 2.14.2
+pygame 1.9  
+pymunk 4  
+pymunktmx 0.7  
+pytmx 2.16.4  
+pyscroll 2.14.2  
 
 
-programming credits
-===================
-sanicforever: leif theden
+Sounds
+======
 
-pytmx, pyscroll: leif theden
-pymunktmx,     : wkmannire
-pymunk,        : verio
-
-art/sound/music credits
-=======================
-Jetrel
-http://opengameart.org/content/castle-platformer
-
-ghost
-PlatForge project, as well as the artist: Stafford McIntyre
-
-hog
-Credit to Stephen "Redshrike" Challener, and a link back to www.OpenGameArt.org
-
-dirt
-Please credit Lanea Zimmerman
-
-sprites
-Please credit Hyptosis and Zabin
-
-monsterboy
-surt
-
-rpg crit
-Redshrike
-
-castle 8-bit
-???
-
-
-music
------
-avgvst
-http://opengameart.org/content/generic-8-bit-jrpg-soundtrack
-
-Augmentality (Brandon Morris)
-http://opengameart.org/content/creepy-forest-f
-
-Brandon75689
-http://opengameart.org/content/cave-theme
-
-sounds
-------
 ViRiX
 http://opengameart.org/content/ui-sound-effects-pack
 Some of the sounds in this project were created by
