@@ -2,9 +2,9 @@
 #encoding: utf-8
 
 from setuptools import setup
+#python setup.py sdist upload -r pypitest
 
-
-setup(name="Bats and Castles",
+setup(name="Sanic Forever",
       version='0.0.1',
       description='Simple Game - python3',
       author='bitcraft',
