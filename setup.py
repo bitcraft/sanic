@@ -2,7 +2,7 @@
 #encoding: utf-8
 
 from setuptools import setup
-#python setup.py sdist upload -r pypitest
+#python setup.py sdist upload
 
 setup(name="Sanic Forever",
       version='0.0.1',
