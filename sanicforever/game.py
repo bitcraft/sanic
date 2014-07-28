@@ -47,9 +47,6 @@ class Game(object):
         running = True
 
         level_rect = surface.get_rect()
-        level_rect.inflate_ip(0, -level_rect.height * .20)
-        level_rect.bottom = surface.get_rect().bottom
-
         hud_group = pygame.sprite.RenderUpdates()
 
         # add stuff to the hud
@@ -224,7 +221,6 @@ class Level(object):
     def spawn_enemy(self, name):
         if not self.sanic:
             return
-        sanic_position = self.sanic.position
 
     def translate(self, coords):
         return pymunk.Vec2d(coords[0], self.map_height - coords[1])
@@ -261,14 +257,11 @@ class Level(object):
 
     def draw(self, surface, rect):
         # draw the background
-        surface.set_clip(rect)
         if self.draw_background:
             left, top = rect.topleft
-            top -= 60
+            surface.set_clip(rect)
             surface.blit(self.bg, (left, top))
             surface.blit(self.bg, (self.bg.get_width(), top))
-        else:
-            surface.fill((0, 0, 0))
         surface.set_clip(None)
 
         # draw the world

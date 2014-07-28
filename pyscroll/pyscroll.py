@@ -110,7 +110,7 @@ class BufferedRenderer(object):
     def generate_default_image(self):
         self.default_image = pygame.Surface((self.data.tilewidth,
                                              self.data.tileheight))
-        self.default_image.fill((0, 0, 0))
+        self.default_image.fill((64, 0, 0))
 
     def get_tile_image(self, position):
         try:
@@ -242,7 +242,6 @@ class BufferedRenderer(object):
         the surface.
         """
         if self.blank:
-            self.blank = False
             self.redraw()
 
         surblit = surface.blit
@@ -298,6 +297,7 @@ class BufferedRenderer(object):
         """
         self.blit_tiles(self.queue)
         self.draw_objects()
+        self.blank = False
 
     def draw_objects(self):
         """ Totally unoptimized drawing of objects to the map
@@ -335,6 +335,9 @@ class BufferedRenderer(object):
             for o in (o for o in layer if o.visible):
                 texture_gid = getattr(o, "texture", None)
                 color = getattr(o, "color", default_color)
+
+                if texture_gid:
+                    texture_gid = int(texture_gid) + 1
 
                 # BUG: this is not going to be completely accurate, because it
                 # does not take into account times where texture is flipped.
@@ -376,9 +379,9 @@ class BufferedRenderer(object):
         ltw = self.view.left * tw
         tth = self.view.top * th
         get_tile = self.get_tile_image
+        fill = self.buffer.fill
 
         if self.colorkey:
-            fill = self.buffer.fill
             old_tiles = set()
             for x, y, l in iterator:
                 tile = get_tile((x, y, l))

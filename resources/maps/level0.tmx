@@ -1,19 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="100" height="40" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="generic_platformer_tiles" tilewidth="16" tileheight="16">
+  <image source="generic_platformer_tiles.png" trans="a349a4" width="1024" height="768"/>
+ </tileset>
  <layer name="Tile Layer 1" width="100" height="40">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA+3BAQEAAACAkP6v7ggKAAAAAAAAAAAAAAAAAAAAao3nfFeAPgAA
+  <data encoding="base64" compression="zlib">
+   eJztw4EJAAAIA6D1P3Tz+iNBd5Kjqqqqqqqqqqqqqqqqqqrq8wVvZBAv
   </data>
  </layer>
+ <objectgroup name="Control" visible="0">
+  <object name="sanic" type="sanic" x="48" y="80" width="32" height="32"/>
+ </objectgroup>
  <objectgroup name="Geometry">
+  <properties>
+   <property name="texture" value="1"/>
+  </properties>
   <object type="pymunktmx_poly" x="-480" y="240">
+   <properties>
+    <property name="texture" value="397"/>
+   </properties>
    <polygon points="0,0 128,0 136,10 147,14 157,15 168,10 192,0 256,0 336,0 432,0 506,8 552,27 642,39 768,32 1264,32 1296,28 1317,20 1330,10 1338,-7 1340,-25 1360,-32 1360,48 0,48"/>
   </object>
   <object type="pymunktmx_poly" x="880" y="208">
+   <properties>
+    <property name="texture" value="397"/>
+   </properties>
    <polygon points="0,0 80,0 112,23 137,61 152,83 183,128 212,166 252,191 288,202 352,208 448,208 482,195 511,167 536,131 567,63 592,-64 720,-64 720,240 0,240"/>
   </object>
- </objectgroup>
- <objectgroup name="Control">
-  <object name="sanic" type="sanic" x="48" y="80" width="32" height="32"/>
+  <object type="pymunktmx_box" x="0" y="288" width="880" height="160">
+   <properties>
+    <property name="texture" value="397"/>
+   </properties>
+  </object>
+  <object type="pymunktmx_box" x="0" y="448" width="1600" height="192">
+   <properties>
+    <property name="texture" value="397"/>
+   </properties>
+  </object>
+  <object type="pymunktmx_box" x="0" y="0" width="16" height="320">
+   <properties>
+    <property name="texture" value="397"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

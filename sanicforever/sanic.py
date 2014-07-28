@@ -233,7 +233,6 @@ class Model(models.UprightModel):
             m = 1.0
         m += .35
         if m > 1.2: m = 1.2
-        print round(vel_x, 0), round(m, 2)
         self.sprite.speed_modifier = m
 
         # this should be a velocity callback

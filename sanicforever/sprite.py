@@ -188,7 +188,7 @@ class ViewPortGroup(pygame.sprite.Group):
         self.resize()
 
     def resize(self):
-        logger.info("resizing the viweports")
+        logger.info("resizing the viweports (%d)", len(self.viewports))
         rects = list()
         if len(self.viewports) == 1:
             x, y, w, h = self.rect
@@ -275,6 +275,7 @@ class ViewPort(pygame.sprite.Sprite):
             md, self.rect.size, colorkey, 2, True)
         self.map_height = md.height * md.tileheight
         self.center()
+        self.map_layer.blank = True
 
         #self.camera_vector = pymunk.Vec2d(rect.center)
 
@@ -322,7 +323,7 @@ class ViewPort(pygame.sprite.Sprite):
         self.center()
 
     def draw(self, surface, rect):
-        if rect is not self.rect:
+        if not rect == self.rect:
             self.set_rect(rect)
 
         camera = self.rect.copy()

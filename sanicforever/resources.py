@@ -57,7 +57,7 @@ def load():
     for name, filename in config.items('map-files'):
         path = _jpath(resource_path, 'maps', filename)
         logger.info("loading %s", path)
-        map = pytmx.tmxloader.load_pygame(path, pixelalpha=True)
+        map = pytmx.tmxloader.load_pygame(path)
         maps[name] = map
         yield map
 
