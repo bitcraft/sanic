@@ -5,6 +5,7 @@ Sonic the Hedgehog demake...wip
 Running the game
 ================
 Recommended is a core 2 duo 2.4 ghz or higher  
+You'll need pygame and pymunk to run it (both available on pip).  The other deps. are included.
 
 
 Default controls
@@ -26,7 +27,7 @@ Version Requirements
 pygame 1.9  
 pymunk 4  
 pymunktmx 0.7  
-pytmx 2.16.4  
+pytmx 3.19.0  
 pyscroll 2.14.2  
 
 
