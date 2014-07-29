@@ -5,7 +5,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="100" height="40">
   <data encoding="base64" compression="zlib">
-   eJztw4EJAAAIA6D1P3Tz+iNBd5Kjqqqqqqqqqqqqqqqqqqrq8wVvZBAv
+   eJztw4EJAAAIA6DV/+zmDknBTrJRVVVVVVVVVVVVVVVVVVX1+wO0vB/O
   </data>
  </layer>
  <objectgroup name="Control" visible="0">
@@ -27,17 +27,17 @@
    </properties>
    <polygon points="0,0 80,0 112,23 137,61 152,83 183,128 212,166 252,191 288,202 352,208 448,208 482,195 511,167 536,131 567,63 592,-64 720,-64 720,240 0,240"/>
   </object>
-  <object type="pymunktmx_box" x="0" y="288" width="880" height="160">
+  <object type="pymunktmx_box" x="-496" y="288" width="1376" height="160">
    <properties>
     <property name="texture" value="397"/>
    </properties>
   </object>
-  <object type="pymunktmx_box" x="0" y="448" width="1600" height="192">
+  <object type="pymunktmx_box" x="-496" y="448" width="2096" height="192">
    <properties>
     <property name="texture" value="397"/>
    </properties>
   </object>
-  <object type="pymunktmx_box" x="0" y="0" width="16" height="320">
+  <object type="pymunktmx_box" x="0" y="-32" width="16" height="320">
    <properties>
     <property name="texture" value="397"/>
    </properties>

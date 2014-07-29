@@ -1,5 +1,4 @@
 import os
-
 import pytmx.tmxloader
 import pygame
 import logging

@@ -3,8 +3,9 @@ import logging
 import pyscroll
 import pygame
 import pymunk
+import threading
 from pymunktmx.shapeloader import load_shapes
-from six.moves import range
+from six.moves import range, queue
 from pygame.locals import *
 
 from . import playerinput
@@ -25,6 +26,19 @@ def ignore_gravity(body, gravity, damping, dt):
     return None
 
 
+def blit_thread(queue, screen, lock):
+    screen_size = screen.get_size()
+    scale = pygame.transform.scale
+    flip = pygame.display.flip
+    while 1:
+        surface = queue.get()
+        if surface is None:
+            break
+        else:
+            with lock:
+                scale(surface, screen_size, screen)
+            flip()
+
 class Game(object):
     def __init__(self):
         self.states = []
@@ -42,9 +56,15 @@ class Game(object):
         screen_size = screen.get_size()
         surface = pygame.Surface([int(i / 2) for i in screen_size])
         scale = pygame.transform.scale
-        flip = pygame.display.flip
         target_fps = config.getint('display', 'target-fps')
         running = True
+
+        screen_queue = queue.Queue()
+        lock = threading.Lock()
+        t = threading.Thread(target=blit_thread,
+                             args=(screen_queue, screen, lock))
+        t.daemon = True
+        t.start()
 
         level_rect = surface.get_rect()
         hud_group = pygame.sprite.RenderUpdates()
@@ -61,20 +81,20 @@ class Game(object):
 
         try:
             while running:
-                dt = clock.tick(target_fps)
-                dt /= 3.0
+                dt = clock.tick(target_fps) / 3.0
                 state = self.states[0]
                 state.handle_input()
                 state.update(dt)
+                state.handle_input()
                 state.update(dt)
+                state.handle_input()
                 state.update(dt)
                 hud_group.update()
-                state.draw(surface, level_rect)
-                hud_group.draw(surface)
-                scale(surface, screen_size, screen)
+                with lock:
+                    state.draw(surface, level_rect)
+                    hud_group.draw(surface)
+                screen_queue.put(surface)
                 running = state.running
-                flip()
-                self.score += 1
 
         except KeyboardInterrupt:
             running = False
@@ -94,6 +114,7 @@ class Level(object):
         self.hud_group = pygame.sprite.Group()
         self._add_queue = set()
         self._remove_queue = set()
+        self.timestep = config.getfloat('world', 'timestep')
         self.draw_background = config.getboolean('display', 'draw-background')
         if self.draw_background:
             self.bg = resources.images['default-bg']
@@ -295,8 +316,15 @@ class Level(object):
         seconds = dt / 1000.
         self.time += seconds
 
-        step_amt = seconds / 3.
+        step_amt = self.timestep
         step = self.space.step
+        step(step_amt)
+        step(step_amt)
+        step(step_amt)
+        step(step_amt)
+        step(step_amt)
+        step(step_amt)
+        step(step_amt)
         step(step_amt)
         step(step_amt)
         step(step_amt)

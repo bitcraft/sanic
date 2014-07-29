@@ -1,3 +1,6 @@
+import pymunkoptions
+pymunkoptions.options["debug"] = False
+
 from sanicforever import config
 import os
 
@@ -14,9 +17,6 @@ logging.basicConfig(
 from sanicforever import resources
 from sanicforever import Game
 import pygame
-
-#import pymunkoptions
-#pymunkoptions.options["debug"] = False
 
 
 def check_libs():
@@ -53,7 +53,6 @@ if __name__ == '__main__':
     pygame.display.set_caption(window_caption)
 
     pygame.init()
-
     pygame.font.init()
 
     screen.fill((0, 0, 0))

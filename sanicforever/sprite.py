@@ -313,7 +313,7 @@ class ViewPort(pygame.sprite.Sprite):
 
         if self.following:
             v = Vec2d(self.following.position)
-            v.y = self.map_height - v.y
+            v.y = self.map_height - v.y - 30
             self.camera_vector = v
 
         if self.camera_vector:

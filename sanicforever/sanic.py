@@ -1,11 +1,13 @@
 import itertools
 import pygame
 import pymunk
+import math
 from . import collisions
 from . import config
 from . import resources
 from . import models
 from .sprite import SanicForeverSprite
+from .sprite import BoxSprite
 from .sprite import make_body
 from .sprite import make_feet
 from .sprite import make_hitbox
@@ -41,13 +43,15 @@ class Model(models.UprightModel):
         # the weight is used to give sanic more inertia while crouched
         self.weight = None
 
+        self.legs = []
+
         self.air_move = 0
         self.air_move_speed = config.getfloat('hero', 'air-move')
 
         self.on_stairs = False
 
         # this is the normal hitbox
-        self.normal_rect = pygame.Rect(0, 0, 32, 40)
+        self.normal_rect = pygame.Rect(0, 0, 50, 60)
         self.normal_feet_offset = (0, .7)
 
         # this is the hitbox for the crouched state
@@ -72,6 +76,11 @@ class Model(models.UprightModel):
         # used for the interal action state machine
         self.state = set()
         self.sprite_direction = self.RIGHT
+        self._sprites = []
+
+    @property
+    def sprites(self):
+        return iter(self._sprites)
 
     def process(self, cmd):
         """ process player input
@@ -187,6 +196,7 @@ class Model(models.UprightModel):
             remove('move', 'brake')
             self.state.add('idle')
             self.sprite.play('idle')
+            self.feet.shape.body.angle = math.pi
 
         elif 'brake' == state:
             self.state.add(state)
@@ -196,7 +206,9 @@ class Model(models.UprightModel):
             if 'jumping' in self.state:
                 pass
             if 'spin' in self.state:
-                self.sprite.flip = bool(self.sprite_direction == self.LEFT)
+                flip = self.sprite_direction == self.LEFT
+                for sprite in self.sprites:
+                    sprite.flip = flip
                 self.accelerate(self.sprite_direction)
             elif grounded:
                 do_run = False
@@ -210,7 +222,9 @@ class Model(models.UprightModel):
                 if 'slide' in self.state:
                     do_run = True
                 if do_run:
-                    self.sprite.flip = bool(self.sprite_direction == self.LEFT)
+                    flip = self.sprite_direction == self.LEFT
+                    for sprite in self.sprites:
+                        sprite.flip = flip
                     self.accelerate(self.sprite_direction)
 
         elif 'jump' == state:
@@ -236,11 +250,11 @@ class Model(models.UprightModel):
         self.sprite.speed_modifier = m
 
         # this should be a velocity callback
-        if vel_x > .1:
+        if vel_x > .15:
             self.process2('slide')
 
         if 'idle' not in self.state:
-            if vel_x < .1:
+            if vel_x < .15:
                 self.process2('stop')
 
     def kill(self):
@@ -249,6 +263,11 @@ class Model(models.UprightModel):
                   collisions.trap, collisions.enemy,
                   collisions.stairs):
             space.remove_collision_handler(collisions.hero, i)
+
+        for leg in self.legs:
+            space.remove(leg.shape)
+            space.remove(leg.shape.body)
+            space.remove(leg.joint)
 
         super(Model, self).kill()
 
@@ -352,10 +371,9 @@ class Model(models.UprightModel):
         self.sprite.shape = new_shape
 
         # make the feet a little slippery
-        self.feet.shape.friction = .8
-
-        # make is easier to spin the ball
-        self.move_mod = 4.0
+        self.feet.shape.friction = 0.6
+        self.move_mod = .5
+        self.speed_mod = .5
 
         # make the game more 'fun', crouching adds a body with a large mass
         # to the player, so as the player is crouched, it carries more inertia
@@ -401,6 +419,7 @@ class Model(models.UprightModel):
         # make the feet sticky again
         self.feet.shape.friction = pymunk.inf
         self.move_mod = 1.0
+        self.speed_mod = 1.0
 
         diff = pymunk.Vec2d(pymunk_feet.position)
 
@@ -422,7 +441,7 @@ class Model(models.UprightModel):
     def attack(self):
         pass
 
-class Sprite(SanicForeverSprite):
+class BodySprite(SanicForeverSprite):
     sprite_sheet = 'sanic-spritesheet'
     name = 'sanic'
     """ animation def:
@@ -457,7 +476,41 @@ class Sprite(SanicForeverSprite):
     ]
 
     def __init__(self, shape):
-        super(Sprite, self).__init__(shape)
+        super(BodySprite, self).__init__(shape)
+        self.load_animations()
+        self.play('idle')
+
+class SanicSprite(SanicForeverSprite):
+    sprite_sheet = 'parts-spritesheet'
+    name = 'sanic'
+    """ animation def:
+        (animation name, interval, func, ((x, y, w, h, x offset, y offset)...
+
+    the frames are passed to fun to create a generator
+    """
+    image_animations = [
+        ('idle',      100, itertools.repeat, (( 90,   0, 50, 60,  0,  0), )),
+    ]
+
+    def __init__(self, shape):
+        super(SanicSprite, self).__init__(shape)
+        self.load_animations()
+        self.play('idle')
+
+class LegSprite(SanicForeverSprite):
+    sprite_sheet = 'parts-spritesheet'
+    name = 'leg'
+    """ animation def:
+        (animation name, interval, func, ((x, y, w, h, x offset, y offset)...
+
+    the frames are passed to fun to create a generator
+    """
+    image_animations = [
+        ('idle',      100, itertools.repeat, ((  0,   0, 32, 50,  0,  0), )),
+    ]
+
+    def __init__(self, shape):
+        super(LegSprite, self).__init__(shape)
         self.load_animations()
         self.play('idle')
 
@@ -473,8 +526,8 @@ def build(space):
     body_body.collision_type = collisions.hero
     body_shape.layers = layers
     body_shape.friction = 1.0
-    body_shape.elasticity = 0
-    body_sprite = Sprite(body_shape)
+    body_shape.elasticity = 0.0
+    body_sprite = SanicSprite(body_shape)
     space.add(body_body, body_shape)
 
     # build feet
@@ -483,7 +536,7 @@ def build(space):
     feet_shape.collision_type = collisions.hero
     feet_shape.layers = layers
     feet_shape.friction = pymunk.inf
-    feet_shape.elasticity = 0
+    feet_shape.elasticity = 0.0
     feet_sprite = SanicForeverSprite(feet_shape)
     space.add(feet_body, feet_shape)
 
@@ -508,12 +561,34 @@ def build(space):
         body_body, feet_body, feet_body.position, (0, 0))
     space.add(motor, joint)
 
+    # the following are cosmetic embellishments
+    def make_leg(offset=(0,0)):
+        w, h = 10, model.normal_rect.height/2
+        leg_mass = .01
+        box_offset = (0, 0)
+        moment = pymunk.inf
+        #moment = pymunk.moment_for_box(10, w,h)
+        leg_body = pymunk.Body(leg_mass, moment)
+        leg_body.position = feet_body.position + (0, 5)
+        leg_shape = pymunk.Poly.create_box(leg_body, (w, h),
+                                           offset=box_offset)
+        leg_shape.layers = 0
+        leg_joint = pymunk.PivotJoint(leg_body, feet_body, offset)
+        space.add(leg_body, leg_shape, leg_joint)
+        sprite = LegSprite(leg_shape)
+        sprite.joint = leg_joint
+        return sprite
+
     # the model is used with gameplay logic
     model.sprite = body_sprite
+    model._sprites.append(make_leg((-5, -10)))
+    model._sprites.append(make_leg((5, -10)))
+    model._sprites.append(body_sprite)
     model.feet = feet_sprite
     model.joint = joint
     model.motor = motor
 
+    # define the collision handlers
     for i in (collisions.boundary, collisions.trap, collisions.enemy):
         space.add_collision_handler(collisions.hero, i,
                                     pre_solve=model.on_collision)

@@ -49,10 +49,11 @@ class UprightModel(Basic):
         self.feet = None
         self.motor = None
         self.joint = None
-        self.move_power = 1
+        self.move_power = 1.0
         self.move_mod = 1.0
-        self.move_speed = 1
-        self.jump_power = 1
+        self.move_speed = 1.0
+        self.speed_mod = 1.0
+        self.jump_power = 1.0
         self.brake_power = pymunk.inf
 
         # prevent super quick animation changes
@@ -119,7 +120,7 @@ class UprightModel(Basic):
 
         amt = direction * self.move_speed
         self.motor.max_force = self.move_power * self.move_mod
-        self.motor.rate = amt
+        self.motor.rate = amt * self.speed_mod
 
     def brake(self):
         self.motor.rate = 0
