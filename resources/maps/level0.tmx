@@ -10,6 +10,7 @@
  </layer>
  <objectgroup name="Control" visible="0">
   <object name="sanic" type="sanic" x="48" y="80" width="32" height="32"/>
+  <object name="springboard_001" type="pymunktmx_box" x="304" y="80" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Geometry">
   <properties>

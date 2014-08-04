@@ -4,17 +4,18 @@ Sonic the Hedgehog demake...wip
 
 Running the game
 ================
-Recommended is a core 2 duo 2.4 ghz or higher  
-You'll need pygame and pymunk to run it (both available on pip).  The other deps. are included.
+Recommended is a core 2 duo 2.4 ghz or higher
+You'll need pygame and pymunk to run it (both available on pip).
+The other deps. are included.
 
 
 Default controls
 ================
 
-w    => jump  
-down => crouch  
+w    => jump
+down => crouch
 
-- arrow keys move  
+- arrow keys move
 
 
 Notes
@@ -24,11 +25,13 @@ draw-physics-overlay drawing mode (sanicforever.ini) is very slow
 
 Version Requirements
 ====================
-pygame 1.9  
-pymunk 4  
-pymunktmx 0.7  
-pytmx 3.19.0  
-pyscroll 2.14.2  
+pygame 1.9
+pymunk 4
+pymunktmx 0.7*
+pytmx 3.19.0*
+pyscroll 2.15.0*
+
+* included in repo
 
 
 Sounds
